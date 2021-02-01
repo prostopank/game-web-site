@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+
+<h1>GAMESPAGE</h1>
+
+
+{% for i in games%}
+<div>
+    {{i.name }} ------
+    {% for x in i.game_genre.all %}
+    {{x.name}},
+    {% endfor %}
+
+</div>
+{% endfor %}
+
+{% endblock %}
