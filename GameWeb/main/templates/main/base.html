@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for i in games%}
+
+<div>
+    {{i.name }} ------
+    {% for x in i.game_genre.all %}
+    {{x.name}},
+    {% endfor %}
+
+</div>
+
+
+{% endfor %}
+</body>
+</html>
