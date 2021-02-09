@@ -1,5 +1,7 @@
-{% extends "main/base.html" %}
-{% block content %}
-<p>Logged out!</p>
-<a href="{% url 'login'%}">Click here to login again.</a>
+{% extends "main/base.html" %} {% block content %} {% load static %}
+<div class="register">
+  <img src="{% static 'main/img/cat.png' %}" width="15%" />
+  <p style="font-size: 20px">Logged out!</p>
+  <a href="{% url 'login'%}">Click here to login again.</a>
+</div>
 {% endblock %}

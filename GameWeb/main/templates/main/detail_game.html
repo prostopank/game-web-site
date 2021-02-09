@@ -1,0 +1,45 @@
+{% extends 'main/base.html' %} {% block content %}
+<div class="wrapper">
+  <div class="detail-box">
+    <h1>{{get_game.name}}</h1>
+    <span style="font-size: 25px">Desription</span>
+    <p>{{get_game.summary}}</p>
+    <span style="font-size: 25px">Release Date</span>
+    <p>{{get_game.first_release_date}}</p>
+    <p>
+      {% for screen in get_game.game_screenshots.all %}
+      <img src="{{screen.url}}" width="45%" style="margin-bottom: 1%" />
+      {% endfor %}
+    </p>
+  </div>
+  <div class="rating_genres_platforms">
+    <span style="font-size: 20px">Rating</span>
+    <div class="rating_user">
+      Users
+      <span style="margin-left: auto">
+        {{get_game.rating|floatformat:2}}({{get_game.rating_count}} reviews)
+      </span>
+    </div>
+    <div class="rating_critic">
+      Critics
+      <span style="margin-left: auto">
+        {{get_game.aggregated_rating|floatformat:2}}({{get_game.aggregated_rating_count}}
+        reviews)
+      </span>
+    </div>
+    <span style="font-size: 20px; margin-top: 2%">Genres</span>
+    <div class="div_for_genres">
+      {% for genre in get_game.genre.all %}
+      <span class="genres">{{genre.name}}</span>
+      {% endfor %}
+    </div>
+    <span style="font-size: 20px; margin-top: 2%">Platforms</span>
+    <div class="div_for_platforms">
+      {% for platform in get_game.platforms.all %}
+      <span class="platforms">{{platform.name}}</span>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="tweets"></div>
+</div>
+{% endblock %}

@@ -1,9 +1,63 @@
-from django.views.generic import ListView
+from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import ListView, CreateView, DetailView
+from django_filters.views import FilterView
 
-from .models import Game
+from .filters import GameFilter
+from .forms import RegisterUserForm
+from .models import Game, MustGames
 
 
-class GameListView(ListView):
+class RegisterUserView(CreateView):
+    model = User
+    template_name = 'registration/register.html'
+    form_class = RegisterUserForm
+    success_url = reverse_lazy('games')
+
+
+def show_all_games_page(request):
+    context = {}
+    filtered_game = GameFilter(request.GET, queryset=Game.objects.all())
+    context['filtered_game'] = filtered_game
+    paginated_filtered_person = Paginator(filtered_game.qs, 12)
+    page_number = request.GET.get('page')
+    game_page_obj = paginated_filtered_person.get_page(page_number)
+    context['game_page_obj'] = game_page_obj
+    context['must_games'] = MustGames.objects.all()
+    return render(request, 'main/games.html', context=context)
+
+
+class GameDetailView(DetailView):
     model = Game
-    template_name = 'main/games.html'
-    context_object_name = 'games'
+    template_name = 'main/detail_game.html'
+    context_object_name = 'get_game'
+
+
+def show_must_games_page(request):
+    context = {}
+    must_game = MustGames.objects.filter(user=request.user)
+    context['must_games_user'] = must_game
+    context['must_games'] = MustGames.objects.all()
+    return render(request, 'main/must_games.html', context=context)
+
+
+class AddToMustView(View):
+    def get(self, request, *args, **kwargs):
+        user = request.user.id
+        game = kwargs.get('pk')
+        if MustGames.objects.filter(user_id=user, game_id=game):
+            return HttpResponseRedirect(reverse_lazy('must_games'))
+        else:
+            MustGames.objects.create(
+                user_id=user, game_id=game
+            )
+        return HttpResponseRedirect(reverse_lazy('must_games'))
+
+
+class ProfileView(ListView):
+    model = User
+    template_name = 'main/profile.html'

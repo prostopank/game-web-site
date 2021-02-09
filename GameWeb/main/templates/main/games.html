@@ -1,19 +1,85 @@
-{% extends 'main/base.html' %}
+{% extends 'main/base.html' %} {% block content %} {% load main_extras%}
 
-{% block content %}
-
-
-<h1>GAMESPAGE</h1>
-
-
-{% for i in games%}
 <div>
-    {{i.name }} ------
-    {% for x in i.game_genre.all %}
-    {{x.name}},
-    {% endfor %}
-
+    <div class="search">
+        <form method="GET" class="form-group row">
+            <span>Name:</span>
+            <div>
+                {{filtered_game.form.name}}
+            </div>
+            <span>Rating:</span>
+            <div>
+                {{filtered_game.form.rating}}
+            </div>
+            <span>Genre:</span>
+            <div>
+                {{filtered_game.form.genre}}
+            </div>
+            <span>Platform:</span>
+            <div>
+                {{filtered_game.form.platforms}}
+            </div>
+            <input type="submit" value="Search" class="btn btn-success"/>
+        </form>
+    </div>
+    <div>
+        <div class="row row-cols-1 row-cols-md-3 g-3" style="margin-left: 10%; margin-right: 10%; align-items: center">
+            {% for game in game_page_obj %}
+            <div>
+                <div class="card card_game_style">
+                    <img src="{{game.cover}}" width="220px"/>
+                    <div class="card-body">
+                        <h5 class="card-title">{{game.name}}</h5>
+                        <p class="card-text">{{game.summary|truncatechars:"50"}}</p>
+                        <a href="/game/{{game.id}}" class="btn btn-dark">Open</a>
+                        {% for must in must_games %}
+                        {% if request.user == must.user and must.game.id == game.id%}
+                        <a href="{% url 'add_to_must' pk=game.id %}" class="btn btn-danger"
+                        >UnMust</a
+                        >
+                        {% endif %}
+                        {% endfor %}
+                        <a href="{% url 'add_to_must' pk=game.id %}" class="btn btn-success"
+                        >Must</a
+                        >
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <nav
+                aria-label="Page navigation example"
+                style="margin-top: 5%; margin-bottom: 5%"
+        >
+            <ul class="pagination justify-content-center">
+                {% if game_page_obj.has_previous %}
+                <li class="page-item">
+                    <a
+                            class="page-link"
+                            style="color: black"
+                            href="{% my_url game_page_obj.previous_page_number 'page' request.GET.urlencode %}"
+                    >Previous</a
+                    >
+                </li>
+                {% endif %}
+                <li class="page-item">
+                    <a class="page-link" href="#" style="color: black"
+                    >{{ game_page_obj.number }} of
+                        {{game_page_obj.paginator.num_pages}}</a
+                    >
+                </li>
+                {% if game_page_obj.has_next %}
+                <li class="page-item">
+                    <a
+                            class="page-link"
+                            style="color: black"
+                            href="{% my_url game_page_obj.next_page_number 'page' request.GET.urlencode %}"
+                    >Next</a
+                    >
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
 </div>
-{% endfor %}
-
 {% endblock %}

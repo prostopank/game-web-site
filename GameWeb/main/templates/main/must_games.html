@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="row row-cols-1 row-cols-md-3 g-3" style="margin-left: 10%; margin-right: 10%; align-items: center">
+    {% for game_must in must_games_user %}
+    <div>
+        <div class="card card_game_style">
+            <img src="{{game_must.game.cover}}" width="220px"/>
+            <div class="card-body">
+                <h5 class="card-title">{{game_must.game.name}}</h5>
+                <p class="card-text">{{game_must.game.summary|truncatechars:"50"}}</p>
+                <a href="/game/{{game_must.game.id}}" class="btn btn-dark">Open</a>
+                {% for must in must_games %}
+                {% if request.user == must.user and must.game.id == game_must.game.id%}
+                <a href="{% url 'add_to_must' pk=game_must.game.id %}" class="btn btn-danger">UnMust</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

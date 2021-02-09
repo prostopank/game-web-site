@@ -1,4 +1,21 @@
+from django.contrib.auth.models import User
 from django.db import models
+
+
+class Genre(models.Model):
+    id = models.IntegerField(primary_key=True, null=False)
+    name = models.CharField(max_length=100, null=False, verbose_name='name')
+
+    def __str__(self):
+        return self.name
+
+
+class Platforms(models.Model):
+    id = models.IntegerField(primary_key=True, null=False)
+    name = models.CharField(max_length=100, null=False, verbose_name='Name')
+
+    def __str__(self):
+        return self.name
 
 
 class Game(models.Model):
@@ -11,22 +28,8 @@ class Game(models.Model):
     aggregated_rating_count = models.IntegerField(null=True, verbose_name='aggregated_rating_count')
     summary = models.TextField(verbose_name='summary')
     cover = models.URLField(null=True, verbose_name='cover')
-
-    def __str__(self):
-        return self.name
-
-
-class Genre(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='game_genre')
-    name = models.CharField(max_length=100, null=False, verbose_name='name')
-
-    def __str__(self):
-        return self.name
-
-
-class Platforms(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='game_platforms')
-    name = models.CharField(max_length=100, null=False, verbose_name='Name')
+    genre = models.ManyToManyField(Genre)
+    platforms = models.ManyToManyField(Platforms)
 
     def __str__(self):
         return self.name
@@ -38,3 +41,11 @@ class ScreenShots(models.Model):
 
     def __str__(self):
         return self.url
+
+
+class MustGames(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.id)

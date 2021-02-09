@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
+    'bootstrapform',
     'main',
 ]
 
@@ -119,3 +121,9 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
