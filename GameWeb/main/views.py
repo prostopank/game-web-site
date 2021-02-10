@@ -5,7 +5,6 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, DetailView
-from django_filters.views import FilterView
 
 from .filters import GameFilter
 from .forms import RegisterUserForm
@@ -27,8 +26,23 @@ def show_all_games_page(request):
     page_number = request.GET.get('page')
     game_page_obj = paginated_filtered_person.get_page(page_number)
     context['game_page_obj'] = game_page_obj
-    context['must_games'] = MustGames.objects.all()
+    if request.user.is_authenticated:
+        context['must_games'] = MustGames.objects.filter(user=request.user)
+    else:
+        context['must_games'] = None
     return render(request, 'main/games.html', context=context)
+
+
+class DeleteOfMustGamesView(View):
+    def get(self, request, *args, **kwargs):
+        user = request.user.id
+        game = kwargs.get('pk')
+        if MustGames.objects.filter(user_id=user, game_id=game):
+            instance = MustGames.objects.filter(user_id=user, game_id=game)
+            print(instance)
+            instance.delete()
+            reverse_lazy('must_games')
+        return HttpResponseRedirect(reverse_lazy('must_games'))
 
 
 class GameDetailView(DetailView):

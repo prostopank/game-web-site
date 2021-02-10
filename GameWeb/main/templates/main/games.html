@@ -2,7 +2,7 @@
 
 <div>
     <div class="search">
-        <form method="GET" class="form-group row">
+        <form method="GET" class="form-group row search">
             <span>Name:</span>
             <div>
                 {{filtered_game.form.name}}
@@ -11,7 +11,7 @@
             <div>
                 {{filtered_game.form.rating}}
             </div>
-            <span>Genre:</span>
+            <span class="ml-4">Genre:</span>
             <div>
                 {{filtered_game.form.genre}}
             </div>
@@ -22,26 +22,23 @@
             <input type="submit" value="Search" class="btn btn-success"/>
         </form>
     </div>
+    <hr>
     <div>
-        <div class="row row-cols-1 row-cols-md-3 g-3" style="margin-left: 10%; margin-right: 10%; align-items: center">
+        <div class="row row-cols-1 row-cols-md-3 g-3"
+             style="margin-left: 10%; margin-right:10%; justify-content: center">
             {% for game in game_page_obj %}
             <div>
-                <div class="card card_game_style">
+                <div class="card card_game_style ml-1 mr-1">
                     <img src="{{game.cover}}" width="220px"/>
                     <div class="card-body">
                         <h5 class="card-title">{{game.name}}</h5>
                         <p class="card-text">{{game.summary|truncatechars:"50"}}</p>
                         <a href="/game/{{game.id}}" class="btn btn-dark">Open</a>
-                        {% for must in must_games %}
-                        {% if request.user == must.user and must.game.id == game.id%}
-                        <a href="{% url 'add_to_must' pk=game.id %}" class="btn btn-danger"
-                        >UnMust</a
-                        >
+                        {% if game.id == game.get_games.all.get.game.id%}
+                        <a href="{% url 'delete' pk=game.id %}" class="btn btn-danger">UnMust</a>
+                        {% else %}
+                        <a href="{% url 'add_to_must' pk=game.id %}" class="btn btn-success">Must</a>
                         {% endif %}
-                        {% endfor %}
-                        <a href="{% url 'add_to_must' pk=game.id %}" class="btn btn-success"
-                        >Must</a
-                        >
                     </div>
                 </div>
             </div>

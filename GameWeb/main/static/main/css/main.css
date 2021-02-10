@@ -11,8 +11,6 @@ margin-left:3%;
 }
 
 .card_game_style {
-  margin-left: 10%;
-  margin-right: 10%;
   margin-top: 10%;
   border: 1px solid rgb(0, 0, 0);
   width: 220px;
@@ -117,5 +115,5 @@ margin-left:3%;
 .search{
     margin-left:6%;
     margin-right:6%;
-    text-align:center;
+    justify-content: center
 }

@@ -9,11 +9,7 @@
                 <h5 class="card-title">{{game_must.game.name}}</h5>
                 <p class="card-text">{{game_must.game.summary|truncatechars:"50"}}</p>
                 <a href="/game/{{game_must.game.id}}" class="btn btn-dark">Open</a>
-                {% for must in must_games %}
-                {% if request.user == must.user and must.game.id == game_must.game.id%}
-                <a href="{% url 'add_to_must' pk=game_must.game.id %}" class="btn btn-danger">UnMust</a>
-                {% endif %}
-                {% endfor %}
+                <a href="{% url 'delete' pk=game_must.game.id %}" class="btn btn-danger">UnMust</a>
             </div>
         </div>
     </div>
