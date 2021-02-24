@@ -115,5 +115,12 @@ margin-left:3%;
 .search{
     margin-left:6%;
     margin-right:6%;
-    justify-content: center
+    justify-content: center;
+}
+
+
+.must_in_game{
+  margin-top: 10%;
+  margin-left:8%;
+  width:200px;
 }

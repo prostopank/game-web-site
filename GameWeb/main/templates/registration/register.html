@@ -1,18 +1,18 @@
 {% extends "main/base.html" %} {% block content %}
 
 <div class="col-4 register">
-  <h2>Registration</h2>
-  <br />
-  <form id="add_form" method="post">
-    {% csrf_token %}
-    <p>{{form.username}}</p>
-    <p>{{form.password}}</p>
-    <p>{{form.email}}</p>
-    <p>{{form.first_name}}</p>
-    <p>{{form.last_name}}</p>
-  </form>
-  <br />
-  <button type="submit" form="add_form" class="btn btn-success">Accept</button>
+    <h2>Registration</h2>
+    <br/>
+    <form id="add_form" method="post">
+        {% csrf_token %}
+        <p>{{form.username}}</p>
+        <p>{{form.password}}</p>
+        <p>{{form.email}}</p>
+        <p>{{form.first_name}}</p>
+        <p>{{form.last_name}}</p>
+    </form>
+    <br/>
+    <button type="submit" form="add_form" class="btn btn-success">Accept</button>
 </div>
 
 {% endblock %}

@@ -39,10 +39,8 @@ class DeleteOfMustGamesView(View):
         game = kwargs.get('pk')
         if MustGames.objects.filter(user_id=user, game_id=game):
             instance = MustGames.objects.filter(user_id=user, game_id=game)
-            print(instance)
             instance.delete()
-            reverse_lazy('must_games')
-        return HttpResponseRedirect(reverse_lazy('must_games'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class GameDetailView(DetailView):
@@ -55,7 +53,6 @@ def show_must_games_page(request):
     context = {}
     must_game = MustGames.objects.filter(user=request.user)
     context['must_games_user'] = must_game
-    context['must_games'] = MustGames.objects.all()
     return render(request, 'main/must_games.html', context=context)
 
 
@@ -64,12 +61,12 @@ class AddToMustView(View):
         user = request.user.id
         game = kwargs.get('pk')
         if MustGames.objects.filter(user_id=user, game_id=game):
-            return HttpResponseRedirect(reverse_lazy('must_games'))
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             MustGames.objects.create(
                 user_id=user, game_id=game
             )
-        return HttpResponseRedirect(reverse_lazy('must_games'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class ProfileView(ListView):

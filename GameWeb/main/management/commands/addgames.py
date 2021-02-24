@@ -1,3 +1,5 @@
+from random import randint
+
 from django.core.management.base import BaseCommand
 from datetime import datetime
 import requests
@@ -50,40 +52,43 @@ class Command(BaseCommand):
                     else:
                         pass
                     if 'summary' in game:
-                        if 'cover' in game:
-                            cover = game['cover']['url'].replace('t_thumb', 't_cover_big')
-                        else:
-                            cover = ''
-                        temp_game = Game.objects.create(
-                            id=game['id'],
-                            name=game['name'],
-                            first_release_date=datetime.utcfromtimestamp(game['first_release_date']).strftime(
-                                '%Y-%m-%d %H:%M:%S'),
-                            rating=game['rating'],
-                            rating_count=game['rating_count'],
-                            aggregated_rating=game['aggregated_rating'],
-                            aggregated_rating_count=game['aggregated_rating_count'],
-                            summary=game['summary'],
-                            cover=cover,
-                        )
-                        if 'genres' in game:
-                            for genre in game['genres']:
-                                temp_game.genre.add(genre['id'])
-                        if 'platforms' in game:
-                            for platform in game['platforms']:
-                                temp_game.platforms.add(platform['id'])
-                        temp_game.save()
+                        summary = game['summary']
+                    else:
+                        summary = ''
+                    if 'cover' in game:
+                        cover = game['cover']['url'].replace('t_thumb', 't_cover_big')
+                    else:
+                        cover = ''
 
-                        if 'screenshots' in game:
-                            for screenshot in game['screenshots']:
-                                ScreenShots.objects.create(
-                                    game=Game.objects.get(id=game['id']),
-                                    url=screenshot['url'].replace('t_thumb', 't_cover_big'),
-                                )
-                        else:
-                            pass
+                    temp_game = Game.objects.create(
+                        id=game['id'],
+                        name=game['name'],
+                        first_release_date=datetime.utcfromtimestamp(game['first_release_date']).strftime(
+                            '%Y-%m-%d %H:%M:%S'),
+                        rating=game['rating'],
+                        rating_count=game['rating_count'],
+                        aggregated_rating=game['aggregated_rating'],
+                        aggregated_rating_count=game['aggregated_rating_count'],
+                        summary=summary,
+                        cover=cover,
+                    )
+                    if 'genres' in game:
+                        for genre in game['genres']:
+                            temp_game.genre.add(genre['id'])
+                    if 'platforms' in game:
+                        for platform in game['platforms']:
+                            temp_game.platforms.add(platform['id'])
+                    temp_game.save()
 
-            time.sleep(1)
+                    if 'screenshots' in game:
+                        for screenshot in game['screenshots']:
+                            ScreenShots.objects.create(
+                                game=Game.objects.get(id=game['id']),
+                                url=screenshot['url'].replace('t_thumb', 't_cover_big'),
+                            )
+                    else:
+                        pass
+
+            time.sleep(randint(1, 3))
             l += 1
-
             print(str(l) + " of 260")
